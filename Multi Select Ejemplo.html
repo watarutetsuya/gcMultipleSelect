@@ -1,0 +1,116 @@
+<htm>
+    <header>
+        <div class="gcSelectContainer">
+            <div class="gcSelectView">-- Seleccionar --</div><div class="gcArrow">🔽</div>
+            <input name="gcInputSelect" type="hidden" class="gcInputSelect" value=""  />
+            <ul class="gcSelectList" style="display: none;">
+                <li><input type="checkbox" class="gcSelectOption" value="1" /><span class="gcSelectOptionText">Opción 1</span></li>
+                <li><input type="checkbox" class="gcSelectOption" value="2" /><span class="gcSelectOptionText">Opción 2</span></li>
+                <li><input type="checkbox" class="gcSelectOption" value="3" /><span class="gcSelectOptionText">Opción 3</span></li>
+                <li><input type="checkbox" class="gcSelectOption" value="4" /><span class="gcSelectOptionText">Opción 4</span></li>
+                <li><input type="checkbox" class="gcSelectOption" value="5" /><span class="gcSelectOptionText">Opción 5</span></li>
+            </ul>
+        </div>
+    </header>
+    <body>
+        <script>
+            var gcSelectInit = function(){
+                var selectElements = document.getElementsByClassName('gcArrow');
+                for (var index = 0; index < selectElements.length; index++) {
+                    var selectArrow = selectElements[index];
+                    selectArrow.addEventListener("click", gcSpoiler);
+                }
+                var selectOptions = document.getElementsByClassName('gcSelectOption');
+                for (var index = 0; index < selectOptions.length; index++) {
+                    var selectOption = selectOptions[index];
+                    selectOption.addEventListener("click", gcShowSelectOption);
+                }
+            }
+
+            var gcSpoiler = function(event){
+                var selectArrow = event.srcElement;
+                var selectElement = selectArrow.parentElement;
+                var selectList = selectElement.getElementsByClassName('gcSelectList')[0];
+                if(selectList.style.display=='none'){
+                    selectList.style.display = "block";
+                    selectArrow.innerHTML = "🔼";
+                    
+                }else{
+                    selectList.style.display = "none";
+                    selectArrow.innerHTML = "🔽";
+                }
+            }
+            
+            var gcShowSelectOption = function(event){
+                var selectOption = event.srcElement;
+                var selectContainer = selectOption.parentElement.parentElement.parentElement;
+                var selectedOptionsValues = [];
+                var selectedOptionsText = [];
+                var selectOptions = selectContainer.getElementsByClassName('gcSelectOption');
+                for (var index = 0; index < selectOptions.length; index++) {
+                    var selectOption = selectOptions[index];
+                    if(selectOption.checked === true){
+                        var selectOptionList = selectOption.parentElement;
+                        var selectOptionText = selectOptionList.getElementsByClassName('gcSelectOptionText')[0];
+                        selectedOptionsValues.push(selectOption.value);
+                        selectedOptionsText.push(selectOptionText.innerHTML);
+                    }
+                }
+                var inputSelect = selectContainer.getElementsByClassName('gcInputSelect')[0];
+                inputSelect.value = selectedOptionsValues.join();
+
+                var selectView = selectContainer.getElementsByClassName('gcSelectView')[0];
+                var html = '';
+                if(selectedOptionsValues.length>0){
+                    html = selectedOptionsText.join(', ');
+                }else{
+                    html = '-- Seleccionar --';
+                }
+                selectView.innerHTML = html;
+            }
+            
+            gcSelectInit();
+        </script>
+        <style>
+            .gcSelectContainer{
+                width: 100%;
+                max-width: 200px;
+                max-height: 21px;
+                border: 0;
+                margin: 0;
+                padding: 10px;
+                position: relative;
+                border-bottom: 1px solid #000;
+            }
+            .gcSelectContainer>div{
+                display: inline-block;
+            }
+            .gcSelectContainer>div.gcSelectView{
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow:ellipsis;
+            }
+            .gcSelectContainer>div.gcArrow{
+                position: absolute;
+                top:0;
+                right: 0;
+                padding: 10px;
+                height: 21px;
+                background-color: #FFF;
+            }
+            .gcSelectContainer>ul.gcSelectList{
+                width: 100%;
+                position:absolute;
+                border: 0;
+                padding: 0;
+                max-height: 200px;
+                overflow-y: auto;
+                overflow-x: auto;
+            }
+            .gcSelectContainer>ul.gcSelectList>li{
+                list-style: none;
+            }
+        </style>
+    </body>
+</htm>
